@@ -84,38 +84,29 @@ def show_all_tasks_from_db():
 
         print(f"  - {task['title']} {due_date_str}")
 
-
 def show_todays_tasks_from_db():
-    """This is Upchups's core "answer" function."""
-    print("\n--- Let's see what's on your plate for today... ---")
+    """Returns today's tasks as a string message for notification."""
+    msg = ""
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    # The SQL query is the magic here. It gets tasks that are due today OR are overdue.
-    # DATE('now') gets today's date in SQLite.
     query = "SELECT * FROM tasks WHERE due_time IS NOT NULL AND DATE(due_time) <= DATE('now') ORDER BY due_time ASC"
     cursor.execute(query)
     tasks = cursor.fetchall()
     conn.close()
 
     if not tasks:
-        print("Nothing pressing is due today. Enjoy the clear schedule!")
-        return
+        return "🎉 Nothing pressing is due today."
 
-    print("Here is your briefing:")
     for task in tasks:
         due_date = datetime.datetime.fromisoformat(
             task['due_time'].replace('Z', '+00:00'))
 
-        # Add a visual cue for overdue tasks
-        if due_date.date() < datetime.date.today():
-            status = "[OVERDUE]"
-        else:
-            status = "[TODAY]"
+        status = "[OVERDUE]" if due_date.date() < datetime.date.today() else "[TODAY]"
+        msg += f"{status:<10} {task['title']} (From: {task['list_name']})\n"
 
-        print(f"  {status:<10} {task['title']} (From: {task['list_name']})")
-# --- HELP FUNCTION ---
+    return msg.strip()
 
 
 # --- SYNC TASKS FROM GOOGLE TO SQLITE ---
