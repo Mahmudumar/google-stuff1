@@ -1,6 +1,7 @@
 *.json
 *.db
-
+*.sqlite
+*.log
 some_other_app
 
 __pycache__
