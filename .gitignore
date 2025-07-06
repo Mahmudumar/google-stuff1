@@ -2,3 +2,5 @@
 *.db
 
 some_other_app
+
+__pycache__
