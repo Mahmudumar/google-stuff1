@@ -3,5 +3,9 @@
 *.sqlite
 *.log
 some_other_app
-
+*.egg-info
 __pycache__
+dist
+build
+build_app.py
+*.spec
