@@ -2,10 +2,12 @@
 *.db
 *.sqlite
 *.log
-some_other_app
 *.egg-info
+*.spec
+
+
+some_other_app
 __pycache__
 dist
 build
 build_app.py
-*.spec
